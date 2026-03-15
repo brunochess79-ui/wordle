@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wordle</title>
+  <title>Wordle+</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,7 +11,119 @@
       font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
       background: #121213;
       color: #fff;
+      min-height: 100vh;
+    }
+
+    /* ── DASHBOARD ──────────────────────────────────────────── */
+    #dashboard {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .dash-logo {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 0.25rem;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .dash-tagline {
+      color: #818384;
+      font-size: 0.85rem;
+      margin-bottom: 36px;
+      letter-spacing: 0.1rem;
+      text-transform: uppercase;
+    }
+
+    .dash-card {
+      background: #1a1a1b;
+      border: 1px solid #3a3a3c;
+      border-radius: 12px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 14px;
+    }
+
+    .dash-card h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      color: #818384;
+      margin-bottom: 12px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dash-btn {
+      flex: 1;
+      padding: 12px 6px;
+      border: 2px solid #3a3a3c;
+      border-radius: 8px;
+      background: transparent;
+      color: #818384;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      line-height: 1.2;
+    }
+
+    .dash-btn span {
+      font-size: 0.62rem;
+      font-weight: 400;
+      text-transform: none;
+      color: #565758;
+    }
+
+    .dash-btn:hover { border-color: #818384; color: #fff; }
+
+    .dash-btn.active {
+      border-color: #538d4e;
+      background: rgba(83,141,78,0.15);
+      color: #fff;
+    }
+
+    .dash-btn.active span { color: #6aaf63; }
+
+    #play-btn {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px;
+      background: #538d4e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.15s;
+    }
+
+    #play-btn:hover { background: #6aaf63; }
+
+    /* ── GAME ───────────────────────────────────────────────── */
+    #game {
+      display: none;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
@@ -19,22 +131,118 @@
 
     header {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       border-bottom: 1px solid #3a3a3c;
-      padding: 12px 0;
-      text-align: center;
-      position: relative;
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
     }
 
+    #back-btn {
+      background: transparent;
+      border: 1px solid #3a3a3c;
+      border-radius: 6px;
+      color: #818384;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    #back-btn:hover { color: #fff; border-color: #818384; }
+
     header h1 {
-      font-size: 2rem;
+      text-align: center;
+      font-size: 1.55rem;
       font-weight: 700;
       letter-spacing: 0.15rem;
       text-transform: uppercase;
     }
 
+    #game-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .badge-pill {
+      background: #2a2a2b;
+      border: 1px solid #3a3a3c;
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: #818384;
+      white-space: nowrap;
+    }
+
+    /* ── HINTS ──────────────────────────────────────────────── */
+    #hints-container {
+      width: 100%;
+      max-width: 520px;
+      padding: 10px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .hint-card {
+      background: #1a1a1b;
+      border: 1px solid #2f2f31;
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hint-label {
+      font-size: 0.65rem;
+      color: #818384;
+      font-weight: 700;
+      letter-spacing: 0.06rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+      min-width: 64px;
+    }
+
+    .hint-options {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .hint-letter {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #565758;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .hint-sep {
+      color: #565758;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    /* ── MESSAGE ────────────────────────────────────────────── */
     #message-container {
-      height: 40px;
+      height: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -46,7 +254,7 @@
       color: #121213;
       font-weight: 700;
       font-size: 0.85rem;
-      padding: 8px 16px;
+      padding: 7px 16px;
       border-radius: 4px;
       opacity: 0;
       transition: opacity 0.3s;
@@ -55,56 +263,33 @@
 
     #message.show { opacity: 1; }
 
+    /* ── BOARD ──────────────────────────────────────────────── */
     #board-container {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 0;
+      padding: 8px 0;
     }
 
-    #board {
-      display: grid;
-      grid-template-rows: repeat(6, 1fr);
-      gap: 5px;
-      width: 350px;
-      height: 420px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
-    }
+    #board { display: grid; gap: 5px; }
+    .row   { display: grid; gap: 5px; }
 
     .tile {
       border: 2px solid #3a3a3c;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
       font-weight: 700;
       text-transform: uppercase;
       user-select: none;
       transition: border-color 0.05s;
     }
 
-    .tile[data-letter] {
-      border-color: #565758;
-      animation: pop 0.1s ease;
-    }
-
-    .tile.reveal {
-      animation: flip 0.5s ease forwards;
-    }
-
-    .tile.shake {
-      animation: shake 0.5s ease;
-    }
-
-    .tile.bounce {
-      animation: bounce 0.1s ease;
-    }
+    .tile[data-letter] { border-color: #565758; animation: pop 0.1s ease; }
+    .tile.reveal  { animation: flip 0.5s ease forwards; }
+    .tile.shake   { animation: shake 0.5s ease; }
+    .tile.bounce  { animation: bounce 0.1s ease; }
 
     @keyframes pop {
       0%   { transform: scale(1); }
@@ -130,33 +315,31 @@
       50% { transform: translateY(-20px); }
     }
 
-    .correct  { --reveal-bg: #538d4e; background: #538d4e; border-color: #538d4e; color: #fff; }
-    .present  { --reveal-bg: #b59f3b; background: #b59f3b; border-color: #b59f3b; color: #fff; }
-    .absent   { --reveal-bg: #3a3a3c; background: #3a3a3c; border-color: #3a3a3c; color: #fff; }
+    .correct { --reveal-bg: #538d4e; background: #538d4e; border-color: #538d4e; color: #fff; }
+    .present { --reveal-bg: #b59f3b; background: #b59f3b; border-color: #b59f3b; color: #fff; }
+    .absent  { --reveal-bg: #3a3a3c; background: #3a3a3c; border-color: #3a3a3c; color: #fff; }
 
+    /* ── KEYBOARD ───────────────────────────────────────────── */
     #keyboard {
-      margin-bottom: 20px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
       align-items: center;
     }
 
-    .key-row {
-      display: flex;
-      gap: 6px;
-    }
+    .key-row { display: flex; gap: 5px; }
 
     .key {
-      height: 58px;
-      min-width: 43px;
-      padding: 0 8px;
+      height: 54px;
+      min-width: 38px;
+      padding: 0 5px;
       border: none;
       border-radius: 4px;
       background: #818384;
       color: #fff;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
       cursor: pointer;
@@ -167,16 +350,16 @@
       transition: background 0.2s;
     }
 
-    .key:active { filter: brightness(0.85); }
-    .key.wide { min-width: 65px; font-size: 0.75rem; }
-
+    .key:active  { filter: brightness(0.85); }
+    .key.wide    { min-width: 56px; font-size: 0.68rem; }
     .key.correct { background: #538d4e; }
     .key.present { background: #b59f3b; }
     .key.absent  { background: #3a3a3c; }
 
+    /* ── PLAY AGAIN ─────────────────────────────────────────── */
     #play-again {
       display: none;
-      margin-top: 16px;
+      margin: 8px 0 16px;
       padding: 12px 28px;
       background: #538d4e;
       color: #fff;
@@ -191,42 +374,139 @@
     }
 
     #play-again:hover { background: #6aaf63; }
+
+    @media (max-width: 360px) {
+      .key { height: 46px; min-width: 30px; }
+      .key.wide { min-width: 48px; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Wordle</h1>
-</header>
+<!-- ══════════════════════ DASHBOARD ══════════════════════ -->
+<div id="dashboard">
+  <div class="dash-logo">Wordle+</div>
+  <div class="dash-tagline">Choose your challenge</div>
 
-<div id="message-container">
-  <div id="message"></div>
+  <div class="dash-card">
+    <h2>Word Length</h2>
+    <div class="btn-group" id="length-btns">
+      <button class="dash-btn" data-val="4">4<br>Letters</button>
+      <button class="dash-btn active" data-val="5">5<br>Letters</button>
+      <button class="dash-btn" data-val="6">6<br>Letters</button>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <h2>Difficulty</h2>
+    <div class="btn-group" id="diff-btns">
+      <button class="dash-btn" data-val="easy">Easy<br><span>3 hints</span></button>
+      <button class="dash-btn active" data-val="medium">Medium<br><span>1 hint</span></button>
+      <button class="dash-btn" data-val="hard">Hard<br><span>No hints</span></button>
+    </div>
+  </div>
+
+  <button id="play-btn">Play</button>
 </div>
 
-<div id="board-container">
-  <div id="board"></div>
+<!-- ══════════════════════ GAME ══════════════════════════ -->
+<div id="game">
+  <header>
+    <button id="back-btn">← Menu</button>
+    <h1>Wordle+</h1>
+    <div id="game-badge">
+      <span class="badge-pill" id="badge-len"></span>
+      <span class="badge-pill" id="badge-diff"></span>
+    </div>
+  </header>
+
+  <div id="hints-container"></div>
+
+  <div id="message-container">
+    <div id="message"></div>
+  </div>
+
+  <div id="board-container">
+    <div id="board"></div>
+  </div>
+
+  <div id="keyboard"></div>
+
+  <button id="play-again">Play Again</button>
 </div>
-
-<div id="keyboard"></div>
-
-<button id="play-again" onclick="initGame()">Play Again</button>
 
 <script>
-// ─── Word lists ───────────────────────────────────────────────────────────────
-const ANSWERS = [
+// ═══════════════════════════════════════════════════════════
+// WORD LISTS
+// ═══════════════════════════════════════════════════════════
+
+const ANSWERS_4 = [
+  "bake","ball","band","bare","bark","barn","bath","bead","bear","beat",
+  "bell","bird","bite","blue","boat","bold","bone","book","born","burn",
+  "cage","cake","call","card","care","cart","cave","chip","clue","coat",
+  "cold","come","cook","cool","cord","core","corn","dare","dark","date",
+  "dawn","deal","deck","deep","desk","dive","dock","dome","done","door",
+  "dose","dove","down","draw","drip","drop","drum","dusk","dust","earn",
+  "east","edge","face","fact","fail","fair","fall","farm","fast","fate",
+  "fear","feel","fell","fern","file","fill","find","fire","firm","flag",
+  "flat","flaw","flow","fold","fond","food","foot","fork","form","four",
+  "free","frog","fuel","full","fund","fury","fuse","gale","game","gaze",
+  "gear","give","glad","glow","glue","goal","goat","gold","golf","grab",
+  "gray","grim","grin","grip","grow","gust","hail","hair","hall","hand",
+  "hang","hard","harm","hate","hawk","head","heal","heap","heat","heel",
+  "helm","herd","hero","hide","high","hill","hold","hole","holy","home",
+  "hood","hook","hope","horn","host","hour","hull","hunt","hurt","jade",
+  "keen","kind","king","knee","knew","lace","lake","lamb","lamp","land",
+  "lane","last","late","lawn","lead","leaf","lean","leap","lend","life",
+  "lift","lime","line","link","lion","list","live","load","loan","loft",
+  "long","look","loop","loss","love","luck","lump","lure","lust","maid",
+  "mail","main","make","mane","mark","mass","mast","mate","mean","meet",
+  "melt","mild","mile","mill","mind","mine","mint","miss","moan","mode",
+  "mole","moon","moss","move","myth","nail","name","near","neat","neck",
+  "need","nice","node","noon","norm","nose","note","once","open","oval",
+  "oven","over","pace","pack","page","paid","pale","palm","park","part",
+  "pass","path","peak","peel","pest","pick","pile","pine","pipe","plan",
+  "plot","plow","plum","pole","pool","port","pose","post","pour","pray",
+  "prey","prod","prop","pump","pure","push","race","rage","raid","rail",
+  "rain","rake","rank","rare","rate","rave","real","reed","rely","rent",
+  "rest","rice","rich","ride","ring","riot","risk","road","roam","roar",
+  "role","roll","roof","rope","rose","rout","rule","rush","rust","safe",
+  "sage","sail","salt","same","sand","sane","save","seed","seek","shed",
+  "ship","shoe","shop","shot","silk","sink","site","skin","slam","slap",
+  "slip","snap","snow","soak","sock","soil","sole","some","song","soon",
+  "sore","soul","sour","span","spin","spit","spot","spur","star","stay",
+  "stem","step","stir","stop","stun","swan","tack","tail","talk","tall",
+  "tame","tank","tape","task","team","tear","tell","tend","tent","tide",
+  "tile","till","time","tire","toad","told","toll","tomb","tool","torn",
+  "toss","town","tray","tree","trim","trio","trip","trot","tuck","tuna",
+  "tune","turf","twin","type","vane","veil","vein","vent","verb","vine",
+  "void","vote","wade","wake","wane","ward","warm","wave","weak","well",
+  "west","wide","wife","wild","will","wind","wine","wing","wire","wise",
+  "wish","word","work","worm","worn","wrap","wren","yell","zero","zone",
+  "zoom","arch","army","bolt","bull","bulb","buzz","clam","clap","clay",
+  "curl","cute","damp","dine","dome","dull","dump","each","epic","even",
+  "evil","fame","felt","fist","flex","flip","foam","fowl","gulf","gulp",
+  "hulk","hung","hurl","icon","jerk","jolt","lurk","muck","mugs","newt",
+  "oxen","pier","pink","pint","pony","pork","pram","ruin","rune","runt",
+  "shin","silk","slab","slug","smug","snob","soar","spud","stub","such",
+  "tack","taxi","tern","than","thaw","thou","tick","tier","tilt","tome",
+  "trek","trod","tuba","tuft","ugly","upon","urge","vale","veer","vibe",
+  "vile","volt","waft","wail","wart","weld","welt","went","whim","whip",
+  "whom","wick","wilt","wisp","woke","womb","yore","yoga","zeal","zero"
+];
+
+const ANSWERS_5 = [
   "crane","slate","trace","crate","least","stare","snare","share","shale",
-  "shame","shape","shake","shade","shade","spare","space","spade","glare",
-  "grace","grade","grape","graze","great","green","greet","groan","groom",
-  "group","grove","gruel","guard","guide","guild","guile","guise","guitar",
-  "gusto","gypsy","habit","haunt","haven","heart","heist","helix","hinge",
-  "hippo","hoard","hobby","holly","homer","honey","honor","horse","hotel",
-  "house","human","humor","hunts","hurts","hyena","idiom","image","imply",
-  "inbox","indie","infer","inlet","inner","input","inter","intro","ionic",
-  "irate","irony","issue","ivory","jazzy","joust","juice","juicy","juror",
-  "kayak","knack","knave","kneel","knife","knock","knoll","knot","known",
-  "label","lance","large","laser","latch","later","latte","laugh","layer",
-  "leach","learn","leash","leave","lemon","level","light","lilac","limit",
-  "linen","liner","liver","llama","local","lodge","lofty","logic","loose",
+  "spare","space","spade","glare","grace","grade","grape","graze","great",
+  "green","groan","group","grove","guard","guide","guild","guile","guise",
+  "habit","haunt","haven","heart","heist","helix","hinge","hoard","hobby",
+  "holly","honey","honor","horse","hotel","house","human","humor","hyena",
+  "idiom","image","imply","inbox","indie","infer","inlet","inner","input",
+  "inter","intro","irate","irony","issue","ivory","jazzy","joust","juice",
+  "juicy","juror","kayak","knack","knave","kneel","knife","knock","knoll",
+  "known","label","lance","large","laser","latch","later","latte","laugh",
+  "layer","leach","learn","leash","leave","lemon","level","light","lilac",
+  "limit","linen","liner","liver","local","lodge","lofty","logic","loose",
   "lover","lower","lucid","lucky","lumpy","lunar","lunch","lusty","lyric",
   "magic","major","maker","manor","maple","march","marry","match","mayor",
   "media","mercy","merit","merry","metal","micro","might","mince","mirth",
@@ -235,159 +515,501 @@ const ANSWERS = [
   "nadir","naive","nanny","navel","nerve","never","newly","night","ninja",
   "noble","noise","north","notch","novel","nurse","nymph","occur","ocean",
   "olive","onset","opera","orbit","order","other","otter","ought","outdo",
-  "outer","outwit","ovary","overt","ovoid","oxide","ozone","paint","panel",
-  "panic","papal","paper","party","pasta","paste","patch","pause","peace",
-  "peach","pearl","pedal","penal","penny","perch","peter","petty","phase",
-  "phone","photo","piano","pilot","pinch","pixel","pizza","place","plain",
-  "plait","plane","plant","plate","plaza","plead","pleat","pluck","plumb",
-  "plume","plump","plunk","plush","point","poise","polar","polka","polyp",
-  "poppy","porch","posse","pouch","poult","pound","pouty","power","prank",
-  "prawn","press","price","prick","pride","prime","print","prize","probe",
-  "prone","prong","proof","prose","proud","prune","psalm","pubic","purge",
-  "queen","query","quest","queue","quick","quiet","quill","quirk","quota",
-  "quote","rabbi","radar","radix","rainy","ramen","ranch","range","rapid",
-  "raven","reach","rebus","recut","reedy","regal","relax","relay","repay",
-  "repel","rerun","resin","retch","retry","revel","rider","ridge","rifle",
-  "right","risky","rival","rivet","robin","robot","rocky","rodeo","rouge",
-  "rough","round","route","royal","rugby","ruler","runny","rural","rusty",
-  "saint","salsa","salty","sandy","sauce","saucy","sauna","savor","scald",
-  "scalp","scant","scare","scarf","scene","scone","scoop","scope","score",
-  "scout","scowl","scram","scrap","screw","scrub","seize","serum","setup",
-  "seven","sewer","shall","shark","sharp","sheen","sheep","sheer","shelf",
-  "shell","shift","shirt","shock","short","shout","shove","shown","shred",
-  "shrew","shrug","sided","siege","sigma","silky","silly","since","sixth",
-  "sixty","sized","skate","skill","skimp","skirt","skull","slain","slant",
+  "outer","ovary","overt","oxide","ozone","paint","panel","panic","paper",
+  "party","pasta","paste","patch","pause","peace","peach","pearl","pedal",
+  "penal","penny","perch","peter","petty","phase","phone","photo","piano",
+  "pilot","pinch","pixel","pizza","place","plain","plait","plane","plant",
+  "plate","plaza","plead","pleat","pluck","plumb","plume","plump","plunk",
+  "plush","point","poise","polar","polka","polyp","poppy","porch","posse",
+  "pouch","pound","power","prank","prawn","press","price","prick","pride",
+  "prime","print","prize","probe","prone","prong","proof","prose","proud",
+  "prune","psalm","purge","queen","query","quest","queue","quick","quiet",
+  "quill","quirk","quota","quote","rabbi","radar","rainy","ramen","ranch",
+  "range","rapid","raven","reach","rebus","recut","reedy","regal","relax",
+  "relay","repay","repel","rerun","resin","retch","retry","revel","rider",
+  "ridge","rifle","right","risky","rival","rivet","robin","robot","rocky",
+  "rodeo","rouge","rough","round","route","royal","rugby","ruler","runny",
+  "rural","rusty","saint","salsa","salty","sandy","sauce","saucy","sauna",
+  "savor","scald","scalp","scant","scare","scarf","scene","scone","scoop",
+  "scope","score","scout","scowl","scram","scrap","screw","scrub","seize",
+  "serum","setup","seven","sewer","shall","shark","sharp","sheen","sheep",
+  "sheer","shelf","shell","shift","shirt","shock","short","shout","shove",
+  "shown","shred","shrew","shrug","siege","sigma","silky","silly","since",
+  "sixth","sixty","skate","skill","skimp","skirt","skull","slain","slant",
   "sleep","sleet","slept","slice","slide","slime","slimy","sling","slink",
-  "slope","sloth","slump","slunk","slurp","small","smack","smart","smear",
-  "smell","smelt","smile","smirk","smite","smoke","smoky","snack","snail",
-  "snake","snare","sneak","sniff","snore","snort","snout","soapy","solar",
-  "solid","solve","sorry","south","sovak","sower","spell","spice","spicy",
-  "spill","spine","spite","splat","split","spoke","spoof","spook","spool",
-  "spore","sport","spout","spray","spree","sprig","spunk","spurn","squad",
-  "squat","squid","squig","stab","stack","staff","stage","staid","stain",
-  "stalk","stall","stamp","stand","stark","start","stash","stead","steam",
-  "steel","steep","steer","stern","stick","stiff","still","sting","stink",
-  "stoic","stomp","stone","stood","stool","stoop","store","storm","story",
-  "stout","stove","strap","straw","stray","strip","strut","stuck","study",
-  "stuff","stump","stung","stunk","stunt","style","suave","sugar","suite",
-  "sulky","sunny","super","surge","swamp","swarm","swear","sweat","sweep",
-  "sweet","swept","swift","swill","swine","swipe","swirl","swoop","sword",
-  "syrup","table","talon","tangy","taunt","tawny","tease","teeth","thank",
-  "theft","their","theme","there","these","think","thorn","those","three",
-  "threw","throw","thrum","thud","thumb","thump","tiara","tidal","tiger",
-  "tight","tiled","timer","tipsy","tired","title","today","token","tonal",
-  "topic","torch","total","touch","tough","towel","tower","toxic","track",
-  "trail","train","tramp","trash","trawl","treat","trend","trial","tribe",
-  "trick","trout","trove","truce","truck","truly","trump","trunk","truss",
-  "trust","truth","tuber","tulip","tummy","tuner","tunic","tutor","tweet",
-  "twice","twill","twine","twist","tying","ulcer","ultra","uncle","uncut",
-  "under","unfit","union","unite","unity","until","upper","upset","urban",
-  "usher","usual","utter","uvula","vague","valid","valor","value","valve",
-  "vault","vaunt","venom","video","vigor","viral","virus","visor","vista",
-  "vital","vivid","vocal","vodka","voice","voila","voter","vouch","vowel",
-  "waltz","waste","watch","water","weary","weave","wedge","weedy","weird",
-  "welder","wheat","wheel","where","which","while","white","whole","wield",
-  "wince","windy","wired","witch","witty","woman","women","woozy","world",
-  "wormy","worse","worst","worth","would","wrath","wring","wrong","wrote",
-  "yacht","yearn","yeast","yield","young","youth","zesty","zonal"
-].filter(w => w.length === 5);
-
-const VALID_GUESSES = new Set([...ANSWERS,
-  "aahed","aalii","abaci","abash","abate","abbey","abbot","abhor","abide",
-  "abler","abode","aboma","abort","about","above","acids","ached","achoo",
-  "acorn","acrid","acted","acute","adage","adagio","added","adder","adept",
-  "admit","adobe","adopt","adore","adorn","adult","aegis","afoot","afoul",
-  "after","again","agate","agave","agaze","agile","aging","aglow","agony",
-  "agora","agree","ahead","aided","aimer","aired","aisle","alias","alibi",
-  "alike","align","allay","alley","allot","allow","alloy","aloft","alone",
-  "along","aloof","aloud","alpha","altar","alter","amber","amble","amend",
-  "amino","amiss","ample","angel","anger","angle","angry","angst","anime",
-  "anise","annex","annoy","antic","anvil","aphid","apple","apply","apron",
-  "aptly","arbor","ardor","arena","argon","arise","armor","aroma","arose",
-  "array","aster","atoll","atone","attic","audio","audit","augur","aural",
-  "avian","avid","avoid","await","awake","award","aware","awful","awoke",
-  "babel","badge","badly","baker","banal","bandy","barge","baste","batch",
-  "bayou","beady","beard","beast","bebop","befog","began","begat","begin",
-  "being","below","berth","besot","bevel","bezel","bible","bidet","biker",
+  "slope","sloth","slump","slurp","small","smack","smart","smear","smell",
+  "smelt","smile","smirk","smite","smoke","smoky","snack","snail","snake",
+  "sneak","sniff","snore","snort","snout","soapy","solar","solid","solve",
+  "sorry","south","spell","spice","spicy","spill","spine","spite","splat",
+  "split","spoke","spoof","spook","spool","spore","sport","spout","spray",
+  "spree","sprig","spunk","spurn","squad","squat","squid","stack","staff",
+  "stage","staid","stain","stalk","stall","stamp","stand","stark","start",
+  "stash","stead","steam","steel","steep","steer","stern","stick","stiff",
+  "still","sting","stink","stoic","stomp","stone","stood","stool","stoop",
+  "store","storm","story","stout","stove","strap","straw","stray","strip",
+  "strut","stuck","study","stuff","stump","stung","stunk","stunt","style",
+  "suave","sugar","suite","sulky","sunny","super","surge","swamp","swarm",
+  "swear","sweat","sweep","sweet","swept","swift","swill","swine","swipe",
+  "swirl","swoop","sword","syrup","table","talon","tangy","taunt","tawny",
+  "tease","teeth","thank","theft","their","theme","there","these","think",
+  "thorn","those","three","threw","throw","thrum","thumb","thump","tiara",
+  "tidal","tiger","tight","tiled","timer","tipsy","tired","title","today",
+  "token","tonal","topic","torch","total","touch","tough","towel","tower",
+  "toxic","track","trail","train","tramp","trash","trawl","treat","trend",
+  "trial","tribe","trick","trout","trove","truce","truck","truly","trump",
+  "trunk","truss","trust","truth","tuber","tulip","tummy","tuner","tunic",
+  "tutor","tweet","twice","twill","twine","twist","tying","ulcer","ultra",
+  "uncle","uncut","under","unfit","union","unite","unity","until","upper",
+  "upset","urban","usher","usual","utter","uvula","vague","valid","valor",
+  "value","valve","vault","vaunt","venom","video","vigor","viral","virus",
+  "visor","vista","vital","vivid","vocal","vodka","voice","voter","vouch",
+  "vowel","waltz","waste","watch","water","weary","weave","wedge","weird",
+  "wheat","wheel","where","which","while","white","whole","wield","wince",
+  "windy","wired","witch","witty","woman","women","woozy","world","wormy",
+  "worse","worst","worth","would","wrath","wring","wrong","wrote","yacht",
+  "yearn","yeast","yield","young","youth","zesty","zonal","abode","abyss",
+  "acute","adage","adept","adobe","adore","adorn","adult","afoul","agile",
+  "aglow","agony","agora","ahead","aisle","alibi","alike","allay","alley",
+  "allot","allow","alloy","aloft","alone","along","aloof","aloud","alpha",
+  "altar","alter","amber","amble","amend","amino","ample","angel","anger",
+  "angle","angry","angst","anime","anise","annex","annoy","antic","anvil",
+  "aphid","apple","apply","apron","ardor","arena","arise","armor","aroma",
+  "arose","array","atoll","atone","attic","audio","audit","augur","aural",
+  "avian","avoid","await","awake","award","aware","awful","awoke","badly",
+  "baker","banal","bandy","barge","baste","batch","bayou","beady","beard",
+  "bebop","began","begin","being","below","berth","bevel","bezel","bidet",
   "biome","birch","birth","bison","blast","blaze","bleat","bleed","blend",
-  "bless","blimp","bliss","bloat","blond","blood","bloom","blot","blown",
-  "boast","boggy","bongo","botch","boxer","brace","braid","braise","brake",
-  "brash","brawl","brawn","braid","broke","brook","broil","brood","broth",
-  "brown","brunt","brush","brute","buddy","buffs","buggy","bulge","bulky",
-  "bumpy","bunch","bunny","buoy","burns","burly","burp","burst","butte",
-  "buyer","cacao","cache","cairn","cameo","candy","canal","cargo","carol",
-  "carry","cedar","cease","cellar","chafe","chain","chalk","champ","chant",
-  "chaos","chasm","cheap","cheer","chess","chief","chill","chive","chock",
-  "choir","chore","chose","civic","civil","clack","clamp","clang","clank",
-  "clash","clasp","claw","cleft","clerk","click","cliff","climb","cling",
-  "clink","cloak","clock","clomp","clone","close","cloud","clown","cluck",
-  "clued","coast","cobalt","cobra","cocoa","colon","colony","comma","comet",
-  "comic","coral","couch","cough","could","cover","covet","cozy","creak",
-  "creed","creek","creep","crisp","cross","crowd","crown","cruel","crumb",
-  "crush","crypt","cubic","cycle","cynic","daily","daisy","dance","daunt",
-  "dense","depot","derby","deter","detox","dingo","disco","ditty","divert",
+  "bless","blimp","bliss","bloat","blood","bloom","boast","botch","boxer",
+  "brace","braid","brake","brash","brawl","brawn","broke","brook","broil",
+  "brood","broth","brown","brush","brute","buddy","buggy","bulge","bulky",
+  "bumpy","bunch","bunny","burns","burst","butte","buyer","cacao","cache",
+  "cairn","cameo","candy","canal","cargo","carol","carry","cedar","cease",
+  "chafe","chain","chalk","champ","chant","chaos","chasm","cheap","cheer",
+  "chess","chief","chill","chive","chock","choir","chore","chose","civic",
+  "civil","clack","clamp","clang","clank","clash","clasp","cleft","clerk",
+  "click","cliff","climb","cling","clink","cloak","clock","clomp","clone",
+  "close","cloud","clown","cluck","clued","coast","cobra","cocoa","colon",
+  "comma","comet","comic","coral","couch","cough","could","cover","covet",
+  "creak","creed","creek","creep","crisp","cross","crowd","crown","cruel",
+  "crumb","crush","crypt","cubic","cycle","cynic","daily","daisy","dance",
+  "daunt","dense","depot","derby","deter","detox","dingo","disco","ditty",
   "dizzy","dolly","donor","dopey","dough","dowdy","dowel","drawn","dread",
   "dream","dregs","drift","drill","drink","drive","drone","drool","droop",
   "drove","drown","druid","drunk","dryer","dumpy","dunce","dusty","dwarf",
-  "dwell","eager","early","easel","eclat","edged","eight","eject","elbow",
-  "elder","elite","ember","emcee","empty","ennui","enact","envy","equal",
-  "erase","erode","evade","event","every","exact","excel","exile","expel",
-  "extra","fable","facet","faint","fairy","famed","fancy","fated","feast",
-  "feign","feral","ferry","fetch","fetid","feud","fewer","fiber","fickle",
-  "fiend","fiery","fifty","fight","final","finch","first","fishy","flair",
-  "flame","flank","flare","flash","flask","flaw","flick","fling","flint",
-  "flock","flood","flora","floss","flour","flout","flown","fluff","fluke",
-  "flung","flunk","flush","flute","foamy","focal","foggy","folio","folly",
-  "foray","force","forge","forlorn","forth","forum","foyer","frail","frame",
-  "frank","fraud","freak","freed","fresh","frill","fritz","front","frost",
-  "froth","frown","froze","fudge","fully","fungi","funky","funny","furry",
-  "gaudy","gauze","gavel","gawky","giddy","gizmo","glade","gland","glare",
-  "glass","glaze","gleam","glean","glide","glint","gloat","gloom","glory",
-  "gloss","glove","glyph","gnash","gnome","godly","goofy","gouge","gourd",
-  "golem","gorge","grimy","grind","gripe","grips","groan","groggy","grovel",
-  "gruel","gruff","grump","grunt","guile","guise","gusto","haiku","hairy",
-  "hammy","handy","harpy","harsh","harps","hasty","haste","hatch","haute",
-  "haven","havoc","henna","hertz","hippy","hitch","hoary","hovel","howdy",
-  "hubby","huffy","hunky","hurdle","hurdy","hushy","inane","index","inept",
-  "inert","inlay","itchy","ivory","jaunt","jelly","joker","jolly","jumbo",
-  "jumpy","kandy","karst","kitty","kluge","knave","kneel","knelt","knobs",
-  "knots","lanky","larva","lasso","leaky","leafy","lefty","leery","leper",
-  "lethal","leery","lexis","liege","lithe","liven","lobby","lowly","lusty",
-  "macho","mammal","manly","mangy","mania","mangy","manky","marvy","muggy",
-  "manly","matte","mauvy","mealy","meaty","melee","messy","mimeo","missy",
-  "moody","moist","moose","motto","mousy","mucky","muddy","muggy","mushy",
-  "nifty","nippy","nitty","nobby","noisy","nosey","notty","nubby","nutty",
-  "oaken","oddly","oldie","oozey","orbit","orcas","outre","ovary","owing",
-  "pager","pasty","patsy","peaky","peeve","pesty","petty","piggy","pithy",
-  "pixy","placid","plait","plonk","pokey","poppy","potty","pouty","privy",
-  "privy","pricy","prissy","prosy","proxy","pudgy","puggy","pulpy","punky",
-  "runty","rustic","sappy","saucy","savvy","scaly","seedy","shady","shaky",
-  "slimy","snoby","soggy","soppy","soupy","spiky","spiny","squab","squat",
-  "stately","stead","stony","stung","suety","sulky","surly","swank","testy",
-  "tippy","topsy","tumid","turfy","unrig","vaunt","veiny","vexed","vying",
-  "wacky","waddy","waged","waned","warty","washy","weedy","wimpy","winky",
-  "wispy","wordy","zingy","zippy","zitty"
-].filter(w => w.length === 5));
+  "dwell","eager","early","easel","edged","eight","eject","elbow","elder",
+  "elite","ember","emcee","empty","ennui","enact","equal","erase","erode",
+  "evade","event","every","exact","excel","exile","expel","extra","fable",
+  "facet","faint","fairy","famed","fancy","fated","feast","feign","feral",
+  "ferry","fetch","fetid","fewer","fiber","fiend","fiery","fifty","fight",
+  "final","finch","first","fishy","flair","flame","flank","flare","flash",
+  "flask","flick","fling","flint","flock","flood","flora","floss","flour",
+  "flout","flown","fluff","fluke","flung","flunk","flush","flute","foamy",
+  "focal","foggy","folio","folly","foray","force","forge","forth","forum",
+  "foyer","frail","frame","frank","fraud","freak","freed","fresh","frill",
+  "fritz","front","frost","froth","frown","froze","fudge","fully","fungi",
+  "funky","funny","furry","gaudy","gauze","gavel","gawky","giddy","gizmo",
+  "glade","gland","glass","glaze","gleam","glean","glide","glint","gloat",
+  "gloom","glory","gloss","glove","glyph","gnash","gnome","godly","goofy",
+  "gouge","gourd","gorge","grimy","grind","gripe","gruff","grump","grunt",
+  "haiku","hairy","hammy","handy","harsh","hasty","haste","hatch","haute",
+  "havoc","henna","hertz","hippy","hitch","hoary","hovel","howdy","hubby",
+  "huffy","hunky","inane","index","inept","inert","inlay","itchy","jaunt",
+  "jelly","joker","jolly","jumbo","jumpy","kitty","kluge","knelt","lanky",
+  "larva","lasso","leaky","leafy","lefty","leery","leper","leery","lexis",
+  "liege","lithe","liven","lobby","lowly","macho","manly","mangy","mania",
+  "manky","matte","mealy","meaty","melee","messy","moody","moist","motto",
+  "mousy","mucky","mushy","nifty","nippy","nitty","noisy","nutty","oaken",
+  "oddly","oldie","pager","pasty","patsy","peaky","peeve","pesty","piggy",
+  "pithy","plonk","pokey","potty","pouty","privy","pricy","pudgy","punky",
+  "sappy","savvy","scaly","seedy","shady","shaky","slimy","soggy","soppy",
+  "soupy","spiky","spiny","stony","sulky","surly","swank","testy","tippy",
+  "topsy","turfy","vaunt","veiny","vexed","vying","wacky","warty","washy",
+  "weedy","wimpy","wispy","wordy","zingy","zippy"
+];
 
-// ─── Game state ───────────────────────────────────────────────────────────────
-let target, currentRow, currentCol, gameOver, tiles, messageTimer;
+const ANSWERS_6 = [
+  "absent","action","advice","afford","afraid","anchor","animal","answer",
+  "archer","autumn","basket","battle","beauty","before","beside","better",
+  "beyond","blazed","bright","broken","bronze","bucket","bundle","butter",
+  "button","castle","cattle","chance","change","charge","cherry","choose",
+  "circle","clever","closed","cobalt","coffee","copper","corner","cotton",
+  "crafty","create","crisis","damage","dancer","darken","defeat","delete",
+  "design","differ","direct","doctor","dollar","dragon","effect","effort",
+  "either","empire","energy","entire","expand","expect","fabled","factor",
+  "fallen","famous","feline","fellow","ferret","figure","filter","finger",
+  "finish","flower","follow","forest","formal","frozen","fumble","garden",
+  "garlic","gentle","ginger","goblin","golden","gravel","growth","handle",
+  "happen","harbor","hidden","hunter","hurdle","hustle","insect","island",
+  "jungle","keeper","kitten","knight","ladder","launch","lavish","lessen",
+  "letter","linger","lively","longer","mantle","marble","maroon","master",
+  "matter","medium","mellow","member","method","middle","mirror","mishap",
+  "modest","monkey","muscle","mystic","napkin","nestle","nickel","noodle",
+  "normal","notion","obtain","opener","option","orange","orphan","outfit",
+  "output","oyster","pardon","parent","pebble","pencil","person","pickle",
+  "pillow","planet","portal","prefer","profit","proper","puzzle","rabbit",
+  "radish","random","reason","reckon","repair","rescue","resent","result",
+  "retire","riddle","rocket","rubber","saddle","safely","sailor","salmon",
+  "sample","second","secret","select","series","settle","shadow","shield",
+  "simple","signal","single","skiing","sleigh","slight","smooth","social",
+  "soften","source","spirit","spoken","spread","spring","stable","statue",
+  "steady","sticky","stolen","strong","struck","studio","subtle","suffer",
+  "supply","switch","symbol","tangle","target","temper","tender","tennis",
+  "tether","thumbs","tickle","timber","toggle","topple","touchy","tragic",
+  "travel","triple","trophy","tumble","tunnel","twitch","unfold","unique",
+  "update","useful","valley","velvet","vessel","victim","violin","vision",
+  "wander","wealth","weaken","wicker","winter","wisdom","wobble","wonder",
+  "wooden","worthy","zipper","active","actual","almost","amount","around",
+  "babies","backed","banker","bounce","breeze","bridge","bridle","cactus",
+  "candle","canvas","castle","cellar","census","chrome","clench","clinic",
+  "clutch","cobble","corkscrew","corner","cosmic","cotton","couple","covert",
+  "crafts","cramps","crawls","create","creamy","cringe","crispy","crooks",
+  "dainty","damage","debate","decide","decode","decree","degree","delays",
+  "deltas","denial","dental","depths","desert","devour","digits","dipped",
+  "dismal","divide","divert","donkey","double","dredge","driven","drowsy",
+  "earthy","easter","elixir","embark","enable","ending","engine","entity",
+  "erupt","estate","evolve","excess","exempt","exotic","fading","fallow",
+  "famine","fasted","fathom","faults","fawned","feline","fervid","fester",
+  "fierce","flimsy","floral","fluffy","flushed","flying","forage","forgive",
+  "fossil","fringe","frugal","gallop","gamble","ghostly","giggle","glimmer",
+  "gnarly","grumpy","gumdrop","gutter","holler","hollow","honest","hornet",
+  "humble","hurdle","hybrid","ignite","impact","import","impure","indent",
+  "inform","inject","invent","invoke","jiggle","jingle","joyful","jumble",
+  "kettle","launch","lively","locket","loosen","losing","mangle","marrow",
+  "marvel","mayhem","mental","meager","modest","mortar","motive","mutual",
+  "narrow","nature","nether","nimble","number","object","occupy","offend",
+  "omelet","onward","origin","palace","patron","patter","patrol","pounce",
+  "powder","prison","prompt","pulsar","pummel","radiant","ramble","ravage",
+  "recess","refuel","reform","refine","regime","render","renown","repeal",
+  "repeat","rescue","revolt","riches","ripple","robust","rosary","roster",
+  "rotate","rubber","rugged","rumble","savage","scenic","scorch","scream",
+  "scribe","scroll","sector","seduce","serpent","simmer","siphon","sister",
+  "sketch","sleepy","sliver","smokey","sorrow","sorrel","sponge","sprout",
+  "squash","squeak","squirm","starve","startle","statute","stench","stiffen",
+  "stormy","streak","stride","strife","string","strive","stubby","subtle",
+  "summit","sunken","sunset","swerve","tactic","tailor","talent","tamper",
+  "tangle","tarnish","temper","tender","thatch","thirst","thorn","thrash",
+  "thread","thresh","thrift","throng","throne","timber","timbre","tinder",
+  "tipped","tiring","tongue","torque","toucan","touchy","trifle","trophy",
+  "trowel","turmoil","turnip","turtle","tycoon","unpack","unruly","unwind",
+  "upbeat","uplift","urgent","usurp","utmost","vacant","vanish","variant",
+  "victor","visible","walrus","weight","wither","wizard","wonder","wrench",
+  "writhe","zephyr"
+];
 
-function pickWord() {
-  return ANSWERS[Math.floor(Math.random() * ANSWERS.length)].toUpperCase();
+// ─── Valid guess sets ────────────────────────────────────────────────────────
+// Build valid sets — answers always valid, plus extra common words per length
+const VALID_4 = new Set([...ANSWERS_4,
+  "aahs","abut","aced","aces","acme","acre","acts","adze","aeon","aged",
+  "ages","aide","aids","ails","aims","airs","airy","also","alto","alum",
+  "amok","amps","anew","ants","apes","apex","apps","apts","aqua","arcs",
+  "area","ares","aria","arks","arms","arts","arty","ashy","asks","asps",
+  "atop","auks","avid","awed","awls","awns","awry","axle","axes","axon",
+  "ayes","babe","bags","bail","bait","bale","balk","balm","bane","bang",
+  "bans","barb","bard","barm","bars","base","bash","bask","bass","bast",
+  "bate","baud","bawl","bays","beau","beck","beds","begs","bels","bens",
+  "berg","berk","berm","beta","bibs","bile","bins","bios","blab","bled",
+  "blot","blub","boas","bobs","bode","bods","bogs","bogy","bola","boon",
+  "boor","boos","bosh","boss","bout","brad","brag","bran","bras","brat",
+  "brew","brig","brim","brio","brit","brow","buck","buff","bugs","bull",
+  "bums","bunk","buns","burg","burr","burs","buss","buts","butt","buzz",
+  "cade","cads","came","camo","camp","cane","cans","carp","cays","ceil",
+  "celt","chub","chug","cloy","coax","cobs","code","cods","cogs","coif",
+  "coin","cola","cols","comp","cons","coop","cope","cops","cork","coup",
+  "cowl","cozy","crag","cram","crew","crib","croc","crop","crow","crux",
+  "cube","cud","cuff","cup","curd","cure","cuts","cyan","dabs","dais",
+  "dale","dash","daze","deed","deem","deer","dell","dent","dial","dike",
+  "din","dint","dire","dole","doll","dork","dote","doze","drab","dray",
+  "dub","dun","dune","dung","dunk","duo","dupe","dyed","dyer","dyke",
+  "ears","ease","echo","eels","egad","eggs","ego","elks","ells","elms",
+  "else","emit","eons","etas","fads","fans","fare","fash","faze","fee",
+  "feed","feet","feud","fez","figs","fink","flaw","flax","flay","flea",
+  "floe","flog","flub","flue","foal","fob","foe","fog","fogy","fop",
+  "fore","fox","foxy","gab","gag","gal","gap","gar","gaud","gawk","gels",
+  "gems","gent","germ","gig","gin","gnaw","gnu","gob","gobs","gods","goo",
+  "gong","gorp","guff","gull","gum","gunk","guru","gut","guts","hag",
+  "hake","ham","hat","haze","hem","hemp","hens","herb","hew","hews",
+  "hive","hob","hoe","hog","hone","honk","hoop","hop","hose","howl",
+  "hub","hue","huff","hugs","hum","hunk","ills","imam","inky","inn",
+  "into","iron","isle","itch","jab","jag","jam","jar","jazz","jig","job",
+  "jog","jot","juts","keg","kelp","ken","kill","kin","knob","knop","lair",
+  "laky","lank","lard","lark","lash","lave","lays","laze","leek","lees",
+  "levy","lex","limb","limy","lint","lira","loch","loge","loin","loll",
+  "lore","lout","lug","lunge","lurk","mace","mare","mart","maul","mead",
+  "meow","mesh","mewl","mime","molt","mope","moo","moor","moot","mops",
+  "mote","mow","muff","mule","mugs","null","nuns","oafs","oaks","oar",
+  "oils","oily","orb","orbs","orca","oxen","pads","pare","pawl","paws",
+  "peas","peek","peen","peer","pent","pews","plop","ploy","pod","poke",
+  "polo","poms","poof","pooh","poos","pore","porn","pout","prow","pubs",
+  "pull","pun","puns","pupa","purl","pyro","quay","quip","quiz","rads",
+  "raga","raps","rasp","read","ream","reek","rein","rick","rigs","rill",
+  "rims","rind","rite","rive","robe","romp","rook","room","roost","rort",
+  "rube","rubs","rue","rug","rune","seep","serf","sewn","shim","shin",
+  "shiv","shod","skit","slob","sloe","slop","slur","smew","smog","snag",
+  "snip","snit","sob","soda","souk","sous","spa","spec","sped","spew",
+  "spud","stet","suds","suet","swam","tabs","tads","tags","tang","tans",
+  "taps","tare","tarp","taut","teas","teem","temp","tics","tick","tied",
+  "ties","tiff","tip","tips","toga","togs","toil","ton","tone","tong",
+  "tops","tuba","tuft","tug","tyke","unit","unto","upon","urge","vast",
+  "vats","veer","vex","vice","visa","vow","wad","wads","waif","ware",
+  "warp","wart","watt","web","webs","wed","weds","wee","wees","weld",
+  "wick","wimps","wool","woof","yap","yaw","yews","yoga","yore","your"
+]);
+
+const VALID_5 = new Set([...ANSWERS_5,
+  "aahed","aalii","abaci","abash","abate","abbey","abbot","abhor","abide",
+  "abler","abode","aboma","abort","about","above","acids","ached","achoo",
+  "acorn","acrid","acted","adagio","added","adder","adept","admit","adopt",
+  "aegis","afoot","after","again","agate","agave","agaze","aging","agony",
+  "agree","aided","aimer","aired","alias","align","allot","alpha","altar",
+  "amino","amiss","angel","argon","armor","array","aster","atone","attic",
+  "audio","augur","axial","babel","badge","baker","banal","barge","bayou",
+  "beady","beard","beast","bebop","befog","begat","being","berth","besot",
+  "bevel","bezel","bible","bidet","biker","biome","birch","bison","blast",
+  "blaze","bleat","bleed","blend","bless","blimp","bliss","bloat","blood",
+  "bloom","boast","boggy","bongo","boxer","brace","brash","brawl","brawn",
+  "brood","broth","brown","brunt","brute","buddy","buffs","buggy","bulge",
+  "bulky","bumpy","bunch","bunny","burns","burst","buyer","cacao","cache",
+  "cairn","cameo","candy","canal","carol","carry","cedar","chafe","chain",
+  "chalk","champ","chant","chaos","chasm","cheap","chess","chief","chill",
+  "chive","choir","chore","civic","clack","clamp","clang","clank","clash",
+  "clasp","cleft","clerk","click","cliff","climb","clink","cloak","clock",
+  "clone","cloud","clown","cluck","colon","comma","comet","coral","couch",
+  "cough","cover","covet","creak","creed","creek","creep","cross","crowd",
+  "crown","crumb","crush","crypt","cycle","cynic","daisy","daunt","dense",
+  "depot","derby","deter","detox","disco","ditty","dizzy","dolly","donor",
+  "dopey","dough","dowdy","dowel","dread","dream","dregs","drift","drone",
+  "drool","droop","drove","druid","dryer","dumpy","dunce","dusty","dwarf",
+  "eagly","easel","edged","elbow","ember","emcee","empty","ennui","enact",
+  "erase","erode","evade","event","exact","excel","exile","expel","fable",
+  "facet","fairy","famed","feast","feign","feral","ferry","fetid","fiber",
+  "fiend","fiery","fifty","finch","first","fishy","flair","flame","flank",
+  "flare","flask","flick","fling","flint","flock","flood","flora","floss",
+  "flour","flout","fluff","fluke","flung","flush","flute","foamy","foggy",
+  "folio","foray","forge","forth","forum","foyer","frail","frame","fraud",
+  "freak","freed","fresh","frill","fritz","front","frost","froth","frown",
+  "froze","fudge","fungi","funky","furry","gaudy","gauze","gavel","gawky",
+  "giddy","gizmo","glade","gland","glass","glaze","gleam","glean","glide",
+  "glint","gloat","gloom","glory","gloss","glove","glyph","gnash","gnome",
+  "godly","goofy","gouge","gourd","gorge","grimy","grind","gripe","gruff",
+  "grump","grunt","haiku","hairy","hammy","handy","harsh","hasty","haste",
+  "hatch","haute","havoc","henna","hippy","hitch","hoary","hovel","howdy",
+  "hubby","huffy","hunky","inane","index","inert","inlay","itchy","jaunt",
+  "jelly","joker","jolly","jumbo","jumpy","kitty","kluge","knelt","lanky",
+  "larva","lasso","leaky","leafy","lefty","leery","leper","lexis","liege",
+  "lithe","liven","lobby","lowly","macho","manly","mangy","mania","matte",
+  "mealy","meaty","melee","messy","moody","moist","motto","mousy","mucky",
+  "mushy","nifty","nippy","nitty","noisy","nutty","oaken","oddly","oldie",
+  "pager","pasty","patsy","peaky","peeve","pesty","piggy","pithy","plonk",
+  "pokey","potty","pouty","privy","pricy","pudgy","sappy","savvy","scaly",
+  "seedy","shady","shaky","soggy","soppy","soupy","spiky","spiny","stony",
+  "surly","swank","testy","tippy","turfy","veiny","vexed","vying","wacky",
+  "warty","washy","weedy","wimpy","wispy","wordy","zingy","zippy"
+]);
+
+const VALID_6 = new Set([...ANSWERS_6,
+  "aboard","abound","abroad","absent","absorb","accent","access","accord",
+  "accrue","accuse","aching","acting","active","actors","actual","acumen",
+  "adding","adjust","adrift","advise","affect","affirm","agency","agreed",
+  "albeit","almost","almond","alpine","although","amount","amused","apiece",
+  "armory","around","artery","asking","aspect","aspire","assert","assets",
+  "astray","atomic","atrium","attain","attend","august","aurora","avenge",
+  "avenue","awhile","baboon","ballot","barons","barter","beckon","before",
+  "behave","behind","behold","belong","beyond","biting","bitter","blanch",
+  "blazes","bleach","bleary","blends","blight","blotch","bonded","bonfire",
+  "borders","bounce","breeze","bridge","bridle","brings","candle","canvas",
+  "casual","census","chrome","clench","clinic","clutch","cobble","column",
+  "combat","comedy","coming","commit","corner","cosmic","couple","covert",
+  "crafts","cramps","crawls","creamy","cringe","crispy","crooks","dainty",
+  "debate","decide","decode","decree","degree","delays","deltas","dental",
+  "depths","desert","devour","digits","dismal","divide","divert","donkey",
+  "double","dredge","driven","drowsy","earthy","easter","elixir","embark",
+  "enable","ending","engine","estate","evolve","excess","exempt","exotic",
+  "fading","famine","fathom","faults","fierce","flimsy","floral","fluffy",
+  "forage","fossil","fringe","frugal","gallop","gamble","giggle","gnarly",
+  "grumpy","gutter","holler","hollow","honest","hornet","humble","hybrid",
+  "ignite","impact","import","impure","indent","inform","inject","invent",
+  "invoke","jiggle","jingle","joyful","jumble","kettle","locket","loosen",
+  "losing","mangle","marrow","marvel","mayhem","mental","mortar","motive",
+  "mutual","narrow","nature","nimble","number","object","occupy","offend",
+  "omelet","onward","origin","palace","patron","patter","patrol","pounce",
+  "powder","prison","prompt","pummel","ramble","ravage","recess","refuel",
+  "reform","refine","regime","render","renown","repeal","repeat","revolt",
+  "riches","ripple","robust","rosary","roster","rotate","rugged","rumble",
+  "savage","scenic","scorch","scream","scribe","scroll","sector","seduce",
+  "simmer","siphon","sister","sketch","sleepy","sliver","smokey","sorrow",
+  "sponge","sprout","squash","squeak","squirm","starve","stench","stormy",
+  "streak","stride","strife","string","strive","stubby","summit","sunken",
+  "sunset","swerve","tactic","tailor","talent","tamper","tarnish","thatch",
+  "thirst","thrash","thread","thresh","thrift","throng","throne","timbre",
+  "tinder","tipped","tiring","tongue","torque","toucan","trifle","trowel",
+  "turnip","turtle","tycoon","unpack","unruly","unwind","upbeat","uplift",
+  "vacant","vanish","victor","walrus","weight","wither","wizard","wrench",
+  "writhe","zephyr","zodiac"
+]);
+
+// ═══════════════════════════════════════════════════════════
+// SETTINGS STATE
+// ═══════════════════════════════════════════════════════════
+let chosenLen  = 5;
+let chosenDiff = 'medium';
+
+// ─── Dashboard logic ─────────────────────────────────────────────────────────
+document.querySelectorAll('#length-btns .dash-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#length-btns .dash-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    chosenLen = parseInt(btn.dataset.val);
+  });
+});
+
+document.querySelectorAll('#diff-btns .dash-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#diff-btns .dash-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    chosenDiff = btn.dataset.val;
+  });
+});
+
+document.getElementById('play-btn').addEventListener('click', startGame);
+document.getElementById('back-btn').addEventListener('click', goToDashboard);
+document.getElementById('play-again').addEventListener('click', goToDashboard);
+
+// ═══════════════════════════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════════════════════════
+let target, wordLen, maxRows, hintCount;
+let currentRow, currentCol, gameOver, tiles, messageTimer;
+let keyEls = {};
+
+const DIFF_HINTS = { easy: 3, medium: 1, hard: 0 };
+const DIFF_LABEL = { easy: 'Easy · 3 hints', medium: 'Medium · 1 hint', hard: 'Hard · No hints' };
+
+function getAnswerList(len) {
+  if (len === 4) return ANSWERS_4;
+  if (len === 6) return ANSWERS_6;
+  return ANSWERS_5;
 }
 
-// ─── Build DOM ────────────────────────────────────────────────────────────────
+function getValidSet(len) {
+  if (len === 4) return VALID_4;
+  if (len === 6) return VALID_6;
+  return VALID_5;
+}
+
+function startGame() {
+  wordLen   = chosenLen;
+  maxRows   = wordLen === 6 ? 7 : 6;
+  hintCount = DIFF_HINTS[chosenDiff];
+
+  const answers = getAnswerList(wordLen);
+  target = answers[Math.floor(Math.random() * answers.length)].toUpperCase();
+
+  document.getElementById('dashboard').style.display = 'none';
+  const gameEl = document.getElementById('game');
+  gameEl.style.display = 'flex';
+
+  document.getElementById('badge-len').textContent  = wordLen + ' letters';
+  document.getElementById('badge-diff').textContent = DIFF_LABEL[chosenDiff];
+
+  currentRow = 0;
+  currentCol = 0;
+  gameOver   = false;
+
+  buildHints();
+  buildBoard();
+  buildKeyboard();
+  document.getElementById('play-again').style.display = 'none';
+  showMessage('');
+}
+
+function goToDashboard() {
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'flex';
+}
+
+// ─── Hint generation ─────────────────────────────────────────────────────────
+function buildHints() {
+  const container = document.getElementById('hints-container');
+  container.innerHTML = '';
+  if (hintCount === 0) return;
+
+  // Pick spread-out positions (0-indexed)
+  const positions = [];
+  for (let i = 0; i < hintCount; i++) {
+    const pos = Math.round((i + 0.5) * wordLen / hintCount - 0.5);
+    positions.push(Math.min(pos, wordLen - 1));
+  }
+
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+  positions.forEach((pos, idx) => {
+    const correct = target[pos];
+    // Pick 2 decoy letters (not the correct one)
+    const pool = alphabet.filter(l => l !== correct);
+    shuffle(pool);
+    const options = shuffle([correct, pool[0], pool[1]]);
+
+    const card = document.createElement('div');
+    card.className = 'hint-card';
+
+    const label = document.createElement('div');
+    label.className = 'hint-label';
+    label.textContent = 'Pos. ' + (pos + 1) + ':';
+    card.appendChild(label);
+
+    const optDiv = document.createElement('div');
+    optDiv.className = 'hint-options';
+
+    options.forEach((letter, i) => {
+      if (i > 0) {
+        const sep = document.createElement('span');
+        sep.className = 'hint-sep';
+        sep.textContent = 'or';
+        optDiv.appendChild(sep);
+      }
+      const box = document.createElement('div');
+      box.className = 'hint-letter';
+      box.textContent = letter;
+      optDiv.appendChild(box);
+    });
+
+    card.appendChild(optDiv);
+    container.appendChild(card);
+  });
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ─── Board ───────────────────────────────────────────────────────────────────
 function buildBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
   tiles = [];
-  for (let r = 0; r < 6; r++) {
+
+  // Tile size responsive to word length
+  const tileSize = wordLen === 4 ? 68 : wordLen === 5 ? 60 : 52;
+  const boardW   = tileSize * wordLen + 5 * (wordLen - 1);
+  const boardH   = tileSize * maxRows + 5 * (maxRows - 1);
+
+  board.style.width  = boardW + 'px';
+  board.style.height = boardH + 'px';
+  board.style.gridTemplateRows = `repeat(${maxRows}, 1fr)`;
+
+  for (let r = 0; r < maxRows; r++) {
     const row = document.createElement('div');
     row.className = 'row';
+    row.style.gridTemplateColumns = `repeat(${wordLen}, 1fr)`;
     const rowTiles = [];
-    for (let c = 0; c < 5; c++) {
+    for (let c = 0; c < wordLen; c++) {
       const tile = document.createElement('div');
       tile.className = 'tile';
+      tile.style.fontSize = (tileSize * 0.46) + 'px';
       row.appendChild(tile);
       rowTiles.push(tile);
     }
@@ -396,13 +1018,12 @@ function buildBoard() {
   }
 }
 
+// ─── Keyboard ────────────────────────────────────────────────────────────────
 const KEY_ROWS = [
   ['Q','W','E','R','T','Y','U','I','O','P'],
   ['A','S','D','F','G','H','J','K','L'],
   ['Enter','Z','X','C','V','B','N','M','⌫']
 ];
-
-let keyEls = {};
 
 function buildKeyboard() {
   const kb = document.getElementById('keyboard');
@@ -424,19 +1045,7 @@ function buildKeyboard() {
   });
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-function initGame() {
-  target = pickWord();
-  currentRow = 0;
-  currentCol = 0;
-  gameOver = false;
-  buildBoard();
-  buildKeyboard();
-  document.getElementById('play-again').style.display = 'none';
-  showMessage('');
-}
-
-// ─── Input handling ───────────────────────────────────────────────────────────
+// ─── Input ───────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.ctrlKey || e.altKey || e.metaKey) return;
   if (e.key === 'Enter') handleKey('Enter');
@@ -452,7 +1061,7 @@ function handleKey(key) {
 }
 
 function addLetter(letter) {
-  if (currentCol >= 5) return;
+  if (currentCol >= wordLen) return;
   const tile = tiles[currentRow][currentCol];
   tile.textContent = letter;
   tile.dataset.letter = letter;
@@ -471,26 +1080,27 @@ function currentGuess() {
   return tiles[currentRow].map(t => t.textContent).join('');
 }
 
-// ─── Guess evaluation ─────────────────────────────────────────────────────────
+// ─── Evaluation ──────────────────────────────────────────────────────────────
 function getColors(guess, answer) {
-  const result = Array(5).fill('absent');
-  const answerArr = answer.split('');
-  const guessArr = guess.split('');
-  // First pass: correct
-  for (let i = 0; i < 5; i++) {
-    if (guessArr[i] === answerArr[i]) {
+  const len = answer.length;
+  const result = Array(len).fill('absent');
+  const ansArr = answer.split('');
+  const gssArr = guess.split('');
+  // Correct first
+  for (let i = 0; i < len; i++) {
+    if (gssArr[i] === ansArr[i]) {
       result[i] = 'correct';
-      answerArr[i] = null;
-      guessArr[i] = null;
+      ansArr[i] = null;
+      gssArr[i] = null;
     }
   }
-  // Second pass: present
-  for (let i = 0; i < 5; i++) {
-    if (guessArr[i] === null) continue;
-    const idx = answerArr.indexOf(guessArr[i]);
+  // Present
+  for (let i = 0; i < len; i++) {
+    if (gssArr[i] === null) continue;
+    const idx = ansArr.indexOf(gssArr[i]);
     if (idx !== -1) {
       result[i] = 'present';
-      answerArr[idx] = null;
+      ansArr[idx] = null;
     }
   }
   return result;
@@ -498,13 +1108,14 @@ function getColors(guess, answer) {
 
 function submitGuess() {
   const guess = currentGuess();
-  if (guess.length < 5) {
+  if (guess.length < wordLen) {
     shakeRow(currentRow);
     showMessage('Not enough letters');
     return;
   }
   const guessLower = guess.toLowerCase();
-  if (!VALID_GUESSES.has(guessLower) && !ANSWERS.includes(guessLower)) {
+  const validSet   = getValidSet(wordLen);
+  if (!validSet.has(guessLower)) {
     shakeRow(currentRow);
     showMessage('Not in word list');
     return;
@@ -512,15 +1123,13 @@ function submitGuess() {
 
   const colors = getColors(guess, target);
   revealRow(currentRow, guess, colors, () => {
-    // Update keyboard
+    // Update keyboard colours
     colors.forEach((color, i) => {
-      const letter = guess[i];
-      const key = keyEls[letter];
+      const key = keyEls[guess[i]];
       if (!key) return;
       const priority = { correct: 3, present: 2, absent: 1 };
-      const current = key.dataset.state || 'none';
-      const currentPriority = priority[current] || 0;
-      if (priority[color] > currentPriority) {
+      const current  = key.dataset.state || 'none';
+      if ((priority[color] || 0) > (priority[current] || 0)) {
         key.className = 'key' + (key.textContent.length > 1 ? ' wide' : '') + ' ' + color;
         key.dataset.state = color;
       }
@@ -528,33 +1137,32 @@ function submitGuess() {
 
     if (colors.every(c => c === 'correct')) {
       gameOver = true;
-      const msgs = ['Genius!','Magnificent!','Impressive!','Splendid!','Great!','Phew!'];
+      const msgs = ['Genius!','Magnificent!','Impressive!','Splendid!','Great!','Phew!','Lucky!'];
       showMessage(msgs[currentRow] || 'Nice!', 3000);
       bounceRow(currentRow);
       document.getElementById('play-again').style.display = 'inline-block';
     } else {
       currentRow++;
       currentCol = 0;
-      if (currentRow >= 6) {
+      if (currentRow >= maxRows) {
         gameOver = true;
-        showMessage(target, 4000);
+        showMessage(target, 5000);
         document.getElementById('play-again').style.display = 'inline-block';
       }
     }
   });
 }
 
-// ─── Animations ───────────────────────────────────────────────────────────────
+// ─── Animations ──────────────────────────────────────────────────────────────
 function revealRow(row, guess, colors, onDone) {
-  const rowTiles = tiles[row];
-  rowTiles.forEach((tile, i) => {
+  tiles[row].forEach((tile, i) => {
     setTimeout(() => {
       tile.style.setProperty('--reveal-bg',
         colors[i] === 'correct' ? '#538d4e' :
         colors[i] === 'present' ? '#b59f3b' : '#3a3a3c'
       );
       tile.classList.add('reveal', colors[i]);
-      if (i === 4) setTimeout(onDone, 300);
+      if (i === wordLen - 1) setTimeout(onDone, 300);
     }, i * 300);
   });
 }
@@ -562,7 +1170,7 @@ function revealRow(row, guess, colors, onDone) {
 function shakeRow(row) {
   tiles[row].forEach(tile => {
     tile.classList.remove('shake');
-    void tile.offsetWidth; // reflow
+    void tile.offsetWidth;
     tile.classList.add('shake');
     tile.addEventListener('animationend', () => tile.classList.remove('shake'), { once: true });
   });
@@ -577,7 +1185,7 @@ function bounceRow(row) {
   });
 }
 
-// ─── Message ──────────────────────────────────────────────────────────────────
+// ─── Message ─────────────────────────────────────────────────────────────────
 function showMessage(text, duration = 1500) {
   const el = document.getElementById('message');
   clearTimeout(messageTimer);
@@ -588,9 +1196,6 @@ function showMessage(text, duration = 1500) {
     messageTimer = setTimeout(() => el.classList.remove('show'), duration);
   }
 }
-
-// ─── Start ────────────────────────────────────────────────────────────────────
-initGame();
 </script>
 </body>
 </html>
